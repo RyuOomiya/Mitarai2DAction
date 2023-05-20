@@ -1,6 +1,7 @@
 using UnityEngine.InputSystem;
 using UnityEngine;
-using Unity.VisualScripting;
+using UniRx;
+using UniRx.Triggers;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,23 +14,46 @@ public class PlayerController : MonoBehaviour
     [Tooltip("InputValue‚ÌŽó‚¯Žæ‚è—p")] float _movementValueX;
     public float JumpSpeed { get; set; }
     bool _isJump = false;
+    bool _isDoubleJump = false;
 
     private void Awake()
     {
         SetJumpSpeed();
+
+        this.UpdateAsObservable()
+            .First(x => _isJump)
+            .Subscribe(x => SetTmpPosition());
     }
 
     void SetJumpSpeed()
     {
         JumpSpeed = _jumpSpeed;
-        Debug.Log(JumpSpeed);
+    }
+
+    void SetDoubleJumpSpeed()
+    {
+        JumpSpeed += _jumpSpeed;
+        Debug.Log("a");
+    }
+
+    void SetTmpPosition()
+    {
+        _tmpPosY = transform.position.y;
     }
 
     void OnJump(InputValue value)
     {
-        SetJumpSpeed();
-        _tmpPosY = transform.position.y;
-        _isJump = true;
+        if (_isJump && !_isDoubleJump)
+        {
+            _isDoubleJump = true;
+            SetDoubleJumpSpeed();
+        }
+
+        if(!_isJump)
+        {
+            SetJumpSpeed();
+            _isJump = true;
+        }
     }
 
     private void OnMove(InputValue value)
@@ -40,8 +64,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        
-
         if(!_isJump)
         transform.position = new Vector2(transform.position.x + _movementValueX * Time.deltaTime, 1);
     }
@@ -50,11 +72,16 @@ public class PlayerController : MonoBehaviour
     {
         if (_isJump)
         {
+            
             transform.position = new Vector2(transform.position.x + _movementValueX * Time.deltaTime,
                 transform.position.y + JumpSpeed * Time.deltaTime);
             JumpSpeed -= _gravitySpeed;
-            if (transform.position.y <= _tmpPosY) _isJump = false;
+
+            if (transform.position.y <= _tmpPosY)
+            {
+                _isJump = false;
+                _isDoubleJump = false;
+            }
         }
     }
-
 }
