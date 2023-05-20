@@ -5,9 +5,8 @@ using System.Collections;
 public class Fire : MonoBehaviour
 {
     [SerializeField] GameObject _bullet;
-    float _inputValueX;
     bool _fire = true;
-
+    
     void OnFire(InputValue value)
     {
         //’·‰Ÿ‚µ‚É‘Î‰‚³‚¹‚½‚©‚Á‚½‚¯‚Ç‚Ü‚½¡“x
