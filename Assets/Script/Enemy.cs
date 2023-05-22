@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -6,6 +7,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] GameObject _player;
     [SerializeField] GameObject _bullet;
     [SerializeField] float _fireDis;
+    bool _fire = true;
 
     private void Awake()
     {
@@ -13,7 +15,7 @@ public class Enemy : MonoBehaviour
     }
     void Update()
     {
-        if(Vector3.Distance(_player.transform.position,transform.position) <= _fireDis)
+        if(Vector3.Distance(_player.transform.position,transform.position) <= _fireDis && _fire)
         {
             StartCoroutine(Shoot());
         }
@@ -21,9 +23,10 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator Shoot()
     {
-        yield return new WaitForSeconds(1f);
-
+        _fire = false;
         Instantiate(_bullet, transform.position, Quaternion.identity).
             GetComponent<Bullet>().SetBulletDirection(-1);
+        yield return new WaitForSeconds(3f);
+        _fire = true;
     }
 }

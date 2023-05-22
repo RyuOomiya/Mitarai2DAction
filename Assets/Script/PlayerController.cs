@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
         SetJumpSpeed();
 
         this.UpdateAsObservable()
-            .First(x => _isJump)
+            .FirstOrDefault(x => _isJump)
             .Subscribe(x => SetTmpPosition());
     }
 
