@@ -1,4 +1,4 @@
-using UnityEngine.InputSystem;
+﻿using UnityEngine.InputSystem;
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float _jumpSpeed;
     [SerializeField] float _moveSpeed;
     [SerializeField,Tooltip("�W�����v���̗������x")] float _gravitySpeed;
+    [SerializeField] private int _lifeCount;
     [Tooltip("InputValue�̎󂯎��p")] float _movementValueX;
     public float JumpSpeed { get; set; }
     bool _isJump = false;
@@ -25,6 +26,11 @@ public class PlayerController : MonoBehaviour
             .Subscribe(x => SetTmpPosition());
     }
 
+    public void Damage()
+    {
+        _lifeCount--;
+    }
+
     void SetJumpSpeed()
     {
         JumpSpeed = _jumpSpeed;
@@ -33,7 +39,6 @@ public class PlayerController : MonoBehaviour
     void SetDoubleJumpSpeed()
     {
         JumpSpeed += _jumpSpeed;
-        Debug.Log("a");
     }
 
     void SetTmpPosition()

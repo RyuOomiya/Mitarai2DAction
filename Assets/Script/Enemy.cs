@@ -7,26 +7,25 @@ public class Enemy : MonoBehaviour
     [SerializeField] GameObject _player;
     [SerializeField] GameObject _bullet;
     [SerializeField] float _fireDis;
-    bool _fire = true;
+    [SerializeField] private float _rate;
+    private float Rate;
 
-    private void Awake()
+    private void Start()
     {
-        _player = GameObject.Find("Player");
+        Rate = 0;
     }
     void Update()
     {
-        if(Vector3.Distance(_player.transform.position,transform.position) <= _fireDis && _fire)
+        if(Vector3.Distance(_player.transform.position,transform.position) <= _fireDis)
         {
-            StartCoroutine(Shoot());
+            Rate -= Time.deltaTime;
+            if(Rate < 0)
+            {
+                Instantiate(_bullet, transform.position, Quaternion.identity).
+                GetComponent<Bullet>().SetBulletDirection(-1);
+                Debug.Log("bang");
+                Rate = _rate;
+            }
         }
-    }
-
-    private IEnumerator Shoot()
-    {
-        _fire = false;
-        Instantiate(_bullet, transform.position, Quaternion.identity).
-            GetComponent<Bullet>().SetBulletDirection(-1);
-        yield return new WaitForSeconds(3f);
-        _fire = true;
     }
 }
