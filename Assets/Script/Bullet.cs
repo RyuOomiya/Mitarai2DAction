@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     enum Infor
-    { 
+    {
         Player,
         Enemy
     }
@@ -14,41 +14,46 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] float _speed = 2f;
     [SerializeField] float _lifeTime = 5f;
-    [SerializeField] GameObject _player;
-    [SerializeField] GameObject _enemy;
+    GameObject _player;
+    EnemyManager _enemyManager;
 
     int _bulletdir;
 
     private void Start()
     {
         _player = GameObject.Find("Player");
+        _enemyManager = GameObject.FindObjectOfType<EnemyManager>();
     }
     public void SetBulletDirection(int dir)
     {
-        if(dir == 1) _infor = Infor.Player;
-        if(dir == -1) _infor = Infor.Enemy;
+        if (dir == 1) _infor = Infor.Player;
+        if (dir == -1) _infor = Infor.Enemy;
         _bulletdir = dir;
     }
     void Update()
     {
-        if (_infor == Infor.Player) 
+        if (_infor == Infor.Player)
         {
-            if(Collision.BoxCollision(transform.position, _enemy.transform.position,
-                                                            transform.localScale, _enemy.transform.localScale))
+            for (int i = 0; i < _enemyManager.Enemies.Count; i++)
             {
-
+                if (_enemyManager.Enemies[i] != null && Collision.BoxCollision(transform.position, _enemyManager.Enemies[i].transform.position,
+                                                                transform.localScale, _enemyManager.Enemies[i].transform.localScale))
+                {
+                    _enemyManager.Enemies[i].GetComponent<Enemy>().Damage();
+                    Destroy(this.gameObject);
+                }
             }
-        } 
+        }
         if (_infor == Infor.Enemy)
         {
-            if(Collision.BoxCollision(transform.position, _player.transform.position,
+            if (_player != null && Collision.BoxCollision(transform.position, _player.transform.position,
                                                             transform.localScale, _player.transform.localScale))
             {
                 _player.GetComponent<PlayerController>().Damage();
                 Destroy(this.gameObject);
             }
         }
-        LifeTime();  
+        LifeTime();
         transform.position = new Vector2(transform.position.x + (_speed * Time.deltaTime) * _bulletdir,
             transform.position.y);
     }

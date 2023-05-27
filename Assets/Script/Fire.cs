@@ -16,7 +16,7 @@ public class Fire : MonoBehaviour
     private IEnumerator Shoot()
     {
         _fire = false;
-        Instantiate(_bullet, new Vector2(transform.position.x + transform.localScale.x, 1), Quaternion.identity).
+        Instantiate(_bullet, new Vector2(transform.position.x + transform.localScale.x, transform.position.y), Quaternion.identity).
             GetComponent<Bullet>().SetBulletDirection(1);
         yield return new WaitForSeconds(0.5f);
         _fire = true;

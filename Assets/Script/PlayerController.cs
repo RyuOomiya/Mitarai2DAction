@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float _jumpSpeed;
     [SerializeField] float _moveSpeed;
     [SerializeField,Tooltip("�W�����v���̗������x")] float _gravitySpeed;
-    [SerializeField] private int _lifeCount;
+    [SerializeField] private IntReactiveProperty _lifeCount = new IntReactiveProperty();
     [Tooltip("InputValue�̎󂯎��p")] float _movementValueX;
     public float JumpSpeed { get; set; }
     bool _isJump = false;
@@ -24,11 +24,16 @@ public class PlayerController : MonoBehaviour
         this.UpdateAsObservable()
             .FirstOrDefault(x => _isJump)
             .Subscribe(x => SetTmpPosition());
+
+        _lifeCount.Subscribe(x =>
+        {
+            if (x <= 0) Destroy(gameObject);
+        });
     }
 
     public void Damage()
     {
-        _lifeCount--;
+        _lifeCount.Value--;
     }
 
     void SetJumpSpeed()

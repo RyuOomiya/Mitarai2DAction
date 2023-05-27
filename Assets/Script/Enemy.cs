@@ -1,5 +1,5 @@
 using System.Collections;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
+using UniRx;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -7,25 +7,41 @@ public class Enemy : MonoBehaviour
     [SerializeField] GameObject _player;
     [SerializeField] GameObject _bullet;
     [SerializeField] float _fireDis;
+    [SerializeField] private IntReactiveProperty _lifeCount = new IntReactiveProperty();
     [SerializeField] private float _rate;
     private float Rate;
 
     private void Start()
     {
         Rate = 0;
+
+        _lifeCount.Subscribe(x =>
+        {
+            if (x <= 0) Destroy(gameObject);
+        });
     }
+
     void Update()
     {
-        if(Vector3.Distance(_player.transform.position,transform.position) <= _fireDis)
+        if (_player != null) 
         {
-            Rate -= Time.deltaTime;
-            if(Rate < 0)
+            if (Vector3.Distance(_player.transform.position, transform.position) <= _fireDis)
             {
-                Instantiate(_bullet, transform.position, Quaternion.identity).
-                GetComponent<Bullet>().SetBulletDirection(-1);
-                Debug.Log("bang");
-                Rate = _rate;
+                Rate -= Time.deltaTime;
+                if (Rate < 0)
+                {
+                    Instantiate(_bullet, transform.position, Quaternion.identity).
+                    GetComponent<Bullet>().SetBulletDirection(-1);
+                    Debug.Log("bang");
+                    Rate = _rate;
+                }
             }
         }
+        
+    }
+
+    public void Damage()
+    {
+        _lifeCount.Value--;
     }
 }
