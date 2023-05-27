@@ -6,12 +6,12 @@ using UniRx.Triggers;
 public class PlayerController : MonoBehaviour
 {
     
-    [Tooltip("’…’n‚ÌŽž—p")] float _tmpPosY;
-    [Tooltip("ƒWƒƒƒ“ƒv’†‚ÌYpos")] float _jumpPosY;
+    [Tooltip("ï¿½ï¿½ï¿½nï¿½ÌŽï¿½ï¿½p")] float _tmpPosY;
+    [Tooltip("ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½Ypos")] float _jumpPosY;
     [SerializeField] float _jumpSpeed;
     [SerializeField] float _moveSpeed;
-    [SerializeField,Tooltip("ƒWƒƒƒ“ƒv’†‚Ì—Ž‰º‘¬“x")] float _gravitySpeed;
-    [Tooltip("InputValue‚ÌŽó‚¯Žæ‚è—p")] float _movementValueX;
+    [SerializeField,Tooltip("ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Ì—ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½x")] float _gravitySpeed;
+    [Tooltip("InputValueï¿½ÌŽó‚¯Žï¿½ï¿½p")] float _movementValueX;
     public float JumpSpeed { get; set; }
     bool _isJump = false;
     bool _isDoubleJump = false;
@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
         SetJumpSpeed();
 
         this.UpdateAsObservable()
-            .First(x => _isJump)
+            .FirstOrDefault(x => _isJump)
             .Subscribe(x => SetTmpPosition());
     }
 

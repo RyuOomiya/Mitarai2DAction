@@ -9,7 +9,7 @@ public class Fire : MonoBehaviour
     
     void OnFire(InputValue value)
     {
-        //’·‰Ÿ‚µ‚É‘Î‰‚³‚¹‚½‚©‚Á‚½‚¯‚Ç‚Ü‚½¡“x
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‘Î‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚Ü‚ï¿½ï¿½ï¿½ï¿½x
         if(_fire) StartCoroutine(Shoot());
     }
 
