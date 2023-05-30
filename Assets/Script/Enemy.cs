@@ -8,17 +8,14 @@ public class Enemy : MonoBehaviour
     [SerializeField] GameObject _bullet;
     [SerializeField] float _fireDis;
     [SerializeField] private IntReactiveProperty _lifeCount = new IntReactiveProperty();
+    public IntReactiveProperty LifeCount => _lifeCount;
     [SerializeField] private float _rate;
     private float Rate;
 
     private void Start()
     {
         Rate = 0;
-
-        _lifeCount.Subscribe(x =>
-        {
-            if (x <= 0) Destroy(gameObject);
-        });
+        _player = GameObject.Find("Player");
     }
 
     void Update()

@@ -100,4 +100,6 @@ MonoBehaviour:
   _player: {fileID: 379951263098447535, guid: 6d3079c80e8b76d439d70e72124b8e0b, type: 3}
   _bullet: {fileID: 6141841690421234387, guid: a581fe1bd9e37c34082ee35c4b288e03, type: 3}
   _fireDis: 5
+  _lifeCount:
+    value: 3
   _rate: 1
