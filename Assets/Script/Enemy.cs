@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
                 if (Rate < 0)
                 {
                     Instantiate(_bullet, transform.position, Quaternion.identity).
-                    GetComponent<Bullet>().SetBulletDirection(-1);
+                    GetComponent<Bullet>().SetBulletDirection(new Vector2(-1,0));
                     Debug.Log("bang");
                     Rate = _rate;
                 }

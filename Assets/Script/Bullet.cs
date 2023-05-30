@@ -17,20 +17,36 @@ public class Bullet : MonoBehaviour
     GameObject _player;
     EnemyManager _enemyManager;
 
-    int _bulletdir;
+    Vector2 _bulletdir;
 
     private void Start()
     {
         _player = GameObject.Find("Player");
         _enemyManager = GameObject.FindObjectOfType<EnemyManager>();
     }
-    public void SetBulletDirection(int dir)
+
+    public void SetBulletDirection(Vector2 dir)
     {
-        if (dir == 1) _infor = Infor.Player;
-        if (dir == -1) _infor = Infor.Enemy;
+        if (dir.x == -1) _infor = Infor.Enemy;
+        else _infor = Infor.Player;
         _bulletdir = dir;
     }
+
     void Update()
+    {
+        IsCollision();
+        LifeTime();
+        transform.position = new Vector2(transform.position.x + (_bulletdir.x * Time.deltaTime),
+            transform.position.y + (_bulletdir.y * Time.deltaTime));
+    }
+
+    void LifeTime()
+    {
+        _lifeTime -= Time.deltaTime;
+        if (_lifeTime <= 0) Destroy(this.gameObject);
+    }
+
+    void IsCollision()
     {
         if (_infor == Infor.Player)
         {
@@ -53,14 +69,5 @@ public class Bullet : MonoBehaviour
                 Destroy(this.gameObject);
             }
         }
-        LifeTime();
-        transform.position = new Vector2(transform.position.x + (_speed * Time.deltaTime) * _bulletdir,
-            transform.position.y);
-    }
-
-    void LifeTime()
-    {
-        _lifeTime -= Time.deltaTime;
-        if (_lifeTime <= 0) Destroy(this.gameObject);
     }
 }

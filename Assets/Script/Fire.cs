@@ -5,6 +5,7 @@ using System.Collections;
 public class Fire : MonoBehaviour
 {
     [SerializeField] GameObject _bullet;
+    [SerializeField] PlayerRotation _pRot;
     bool _fire = true;
     
     void OnFire(InputValue value)
@@ -16,8 +17,10 @@ public class Fire : MonoBehaviour
     private IEnumerator Shoot()
     {
         _fire = false;
-        Instantiate(_bullet, new Vector2(transform.position.x + transform.localScale.x, transform.position.y), Quaternion.identity).
-            GetComponent<Bullet>().SetBulletDirection(1);
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 shotDir = Vector3.Scale((mouseWorldPos - transform.position), new Vector3(1, 1, 0)).normalized;
+        Instantiate(_bullet, new Vector2(transform.position.x + shotDir.x, transform.position.y), _pRot.PlayerDir).
+            GetComponent<Bullet>().SetBulletDirection(shotDir);
         yield return new WaitForSeconds(0.5f);
         _fire = true;
     }
